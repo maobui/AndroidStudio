@@ -32,6 +32,6 @@ public class MainActivity extends AppCompatActivity {
         // automatically by the system.
         setContentView(R.layout.fragment_layout);
 
-        //Test for Git commit.
+        //Test for Git commit command.
     }
 }

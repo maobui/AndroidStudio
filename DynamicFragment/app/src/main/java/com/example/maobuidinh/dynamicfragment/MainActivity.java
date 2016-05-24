@@ -31,5 +31,7 @@ public class MainActivity extends AppCompatActivity {
         // res/layout-land/fragment_layout.xml (landscape mode). This is done
         // automatically by the system.
         setContentView(R.layout.fragment_layout);
+
+        //Test for Git commit.
     }
 }

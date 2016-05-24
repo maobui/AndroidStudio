@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">interview03</string>
+    <string name="text_first_fragment_title">Title</string>
+    <string name="button_first_text">Button</string>
+</resources>

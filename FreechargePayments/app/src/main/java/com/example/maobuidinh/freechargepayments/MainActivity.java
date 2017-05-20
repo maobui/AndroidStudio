@@ -15,6 +15,11 @@ import in.freecharge.checkout.android.exception.FreechargeSdkException;
 import in.freecharge.checkout.android.handler.FreeChargeAddMoneyCallback;
 import in.freecharge.checkout.android.handler.FreeChargePaymentCallback;
 
+
+/*
+// Add from src : https://bitbucket.org/freecharge/paywithfreecharge-android/src
+//
+ */
 public class MainActivity extends Activity {
 
     Button btnPay, btnAddMoney;

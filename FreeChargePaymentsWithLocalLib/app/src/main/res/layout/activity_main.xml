@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.maobuidinh.freechargepaymentswithlocallib.MainActivity">
+
+    <Button
+        android:id="@+id/btnPay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp"
+        android:backgroundTint="@color/holo_blue_light"
+        android:text="Pay"
+        tools:layout_editor_absoluteX="148dp"
+        tools:layout_editor_absoluteY="231dp"/>
+
+    <Button
+        android:id="@+id/btnAddMoney"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btnPay"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="59dp"
+        android:backgroundTint="@color/colorPrimaryDark"
+        android:text="Add Money"
+        tools:layout_editor_absoluteX="141dp"
+        tools:layout_editor_absoluteY="279dp"/>
+</RelativeLayout>

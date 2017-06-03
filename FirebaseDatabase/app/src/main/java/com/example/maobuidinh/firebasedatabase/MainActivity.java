@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -48,6 +49,37 @@ public class MainActivity extends AppCompatActivity {
 
         // get reference to 'users' node
         mFirebaseDatabase = mFirebaseInstance.getReference("users");
+
+        mFirebaseDatabase.orderByValue().addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Log.e(TAG, "**** The " + dataSnapshot.getKey() + " score is " + dataSnapshot.getValue());
+                User user = dataSnapshot.getValue(User.class);
+                Log.e(TAG, "**** user email: " + user.email);
+                Log.e(TAG, "**** user name : " + user.name);
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
 
         // store app title to 'app_title' node
         mFirebaseInstance.getReference("app_title").setValue("FirebaseDatabase");

@@ -1,9 +1,11 @@
 package com.example.maobuidinh.svg;
 
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
+import android.support.v7.content.res.AppCompatResources;
 import android.support.v7.widget.AppCompatImageView;
 import android.view.View;
 
@@ -21,7 +23,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         final AppCompatImageView icAndroid = (AppCompatImageView) findViewById(R.id.ic_android);
-        icAndroid.setImageResource(R.drawable.ic_android);
+//        icAndroid.setImageResource(R.drawable.ic_android);
+        Drawable vectorDrawable
+                = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.ic_android);
+        icAndroid.setImageDrawable(vectorDrawable);
 
         icAndroid.setOnClickListener(new View.OnClickListener() {
             @Override

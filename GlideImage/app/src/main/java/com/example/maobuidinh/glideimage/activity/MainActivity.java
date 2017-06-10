@@ -26,7 +26,8 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     private String TAG = MainActivity.class.getSimpleName();
-    private static final String endpoint = "http://api.androidhive.info/json/glide.json";
+//    private static final String endpoint = "http://api.androidhive.info/json/glide.json";
+    private static final String endpoint = "https://raw.githubusercontent.com/maobui/AndroidStudio/master/GlideImage/glide.json";
     private ArrayList<Image> images;
     private ProgressDialog pDialog;
     private GalleryAdapter mAdapter;

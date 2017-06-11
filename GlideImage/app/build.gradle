@@ -17,6 +17,8 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    //for use DefaultHttpClient on api >= 23
+    //useLibrary 'org.apache.http.legacy'
 }
 
 dependencies {

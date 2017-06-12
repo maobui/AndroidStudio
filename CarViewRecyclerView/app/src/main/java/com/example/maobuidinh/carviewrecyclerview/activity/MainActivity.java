@@ -7,8 +7,8 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.View;
@@ -24,10 +24,13 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String TAG = MainActivity.class.getSimpleName();
     private RecyclerView recyclerView;
     private AlbumsAdapter adapter;
     private List<Album> albumList;
 
+    // num of picture of album.
+    private static final int ALBUM_SIZE = 20;
     //num of the columns.
     private final int SPANCOUNT = 2;
     //space of 2 columns.
@@ -47,9 +50,10 @@ public class MainActivity extends AppCompatActivity {
         albumList = new ArrayList<>();
         adapter = new AlbumsAdapter(this, albumList);
 
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, SPANCOUNT);
+//        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, SPANCOUNT);
+        RecyclerView.LayoutManager mLayoutManager = new StaggeredGridLayoutManager(SPANCOUNT + 1, StaggeredGridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.addItemDecoration(new GridSpacingItemDecoration(SPANCOUNT, dpToPx(SPACING), true));
+//        recyclerView.addItemDecoration(new GridSpacingItemDecoration(SPANCOUNT, dpToPx(SPACING), true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
 
@@ -98,18 +102,25 @@ public class MainActivity extends AppCompatActivity {
      * Adding few albums for testing
      */
     private void prepareAlbums() {
-        int[] covers = new int[]{
-                R.drawable.album1,
-                R.drawable.album2,
-                R.drawable.album3,
-                R.drawable.album4,
-                R.drawable.album5,
-                R.drawable.album6,
-                R.drawable.album7,
-                R.drawable.album8,
-                R.drawable.album9,
-                R.drawable.album10,
-                R.drawable.album11};
+//        int[] covers = new int[]{
+//                R.drawable.album1,
+//                R.drawable.album2,
+//                R.drawable.album3,
+//                R.drawable.album4,
+//                R.drawable.album5,
+//                R.drawable.album6,
+//                R.drawable.album7,
+//                R.drawable.album8,
+//                R.drawable.album9,
+//                R.drawable.album10,
+//                R.drawable.album11,
+//                R.drawable.album12,
+//                R.drawable.album13};
+        int [] covers = new int [ALBUM_SIZE];
+        for (int i = 0; i < ALBUM_SIZE; i++){
+            int temp = i + 1;
+            covers[i] = getResources().getIdentifier("album" + temp, "drawable", getPackageName() );
+        }
 
         Album a = new Album("True Romance", 13, covers[0]);
         albumList.add(a);
@@ -129,6 +140,13 @@ public class MainActivity extends AppCompatActivity {
         a = new Album("I Need a Doctor", 1, covers[5]);
         albumList.add(a);
 
+        // Special image (album19, album20 )has w x h smaller than normal image
+        a = new Album("Honeymoon", 14, covers[18]);
+        albumList.add(a);
+
+        a = new Album("Honeymoon", 14, covers[19]);
+        albumList.add(a);
+
         a = new Album("Loud", 11, covers[6]);
         albumList.add(a);
 
@@ -139,6 +157,37 @@ public class MainActivity extends AppCompatActivity {
         albumList.add(a);
 
         a = new Album("Greatest Hits", 17, covers[9]);
+        albumList.add(a);
+
+        a = new Album("Top Hits", 17, covers[10]);
+        albumList.add(a);
+
+        a = new Album("King Hits", 17, covers[11]);
+        albumList.add(a);
+
+        a = new Album("VIP Hits", 17, covers[12]);
+        albumList.add(a);
+
+        a = new Album("True Romance", 13, covers[13]);
+        albumList.add(a);
+
+        a = new Album("Xscpae", 8, covers[14]);
+        albumList.add(a);
+
+        a = new Album("Maroon 5", 11, covers[15]);
+        albumList.add(a);
+
+        a = new Album("Born to Die", 12, covers[16]);
+        albumList.add(a);
+
+        a = new Album("Honeymoon", 14, covers[17]);
+        albumList.add(a);
+
+        // Special image (album19, album20 )has w x h smaller than normal image
+        a = new Album("Honeymoon", 14, covers[18]);
+        albumList.add(a);
+
+        a = new Album("Honeymoon", 14, covers[19]);
         albumList.add(a);
 
         adapter.notifyDataSetChanged();

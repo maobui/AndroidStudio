@@ -1,15 +1,19 @@
 package com.example.maobuidinh.carviewrecyclerview.activity;
 
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
@@ -36,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
     //space of 2 columns.
     private final int SPACING = 10;
 
+    private static boolean is_staggered_grid_layout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,12 +56,20 @@ public class MainActivity extends AppCompatActivity {
         albumList = new ArrayList<>();
         adapter = new AlbumsAdapter(this, albumList);
 
-//        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, SPANCOUNT);
-        RecyclerView.LayoutManager mLayoutManager = new StaggeredGridLayoutManager(SPANCOUNT + 1, StaggeredGridLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(mLayoutManager);
-//        recyclerView.addItemDecoration(new GridSpacingItemDecoration(SPANCOUNT, dpToPx(SPACING), true));
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        Log.d(TAG, "onCreate SharedPreferenceChanged staggered_grid_layout : " + is_staggered_grid_layout);
+        setLayoutManager(is_staggered_grid_layout);
         recyclerView.setAdapter(adapter);
+
+//        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+//        SharedPreferences.OnSharedPreferenceChangeListener listener =
+//                new SharedPreferences.OnSharedPreferenceChangeListener() {
+//                    public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
+//                        // listener implementation
+//                        is_staggered_grid_layout  = prefs.getBoolean(SettingsActivity.STAGGERED_GRID_LAYOUT, false);
+//                        Log.d(TAG, "onCreate OnSharedPreferenceChangeListener is_staggered_grid_layout *** : " + is_staggered_grid_layout);
+//                    }
+//                };
+//        prefs.registerOnSharedPreferenceChangeListener(listener);
 
         prepareAlbums();
 
@@ -237,5 +251,30 @@ public class MainActivity extends AppCompatActivity {
     private int dpToPx(int dp) {
         Resources r = getResources();
         return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        is_staggered_grid_layout  = sharedPref.getBoolean(SettingsActivity.STAGGERED_GRID_LAYOUT, false);
+        Log.d(TAG, "onRestart SharedPreferenceChanged staggered_grid_layout : " + is_staggered_grid_layout);
+        setLayoutManager(is_staggered_grid_layout);
+    }
+
+    public void setLayoutManager (boolean is)
+    {
+        RecyclerView.LayoutManager mLayoutManager;
+        recyclerView.setHasFixedSize(true);
+        if (is) {
+            mLayoutManager = new StaggeredGridLayoutManager(SPANCOUNT + 1, StaggeredGridLayoutManager.VERTICAL);
+            recyclerView.setLayoutManager(mLayoutManager);
+        } else {
+            mLayoutManager = new GridLayoutManager(this, SPANCOUNT);
+            recyclerView.setLayoutManager(mLayoutManager);
+            recyclerView.addItemDecoration(new GridSpacingItemDecoration(SPANCOUNT, dpToPx(SPACING), true));
+        }
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        adapter.notifyDataSetChanged();
     }
 }

@@ -1,6 +1,7 @@
 package com.example.maobuidinh.carviewrecyclerview.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.maobuidinh.carviewrecyclerview.R;
+import com.example.maobuidinh.carviewrecyclerview.activity.SettingsActivity;
 import com.example.maobuidinh.carviewrecyclerview.model.Album;
 
 import java.util.List;
@@ -96,6 +98,9 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.MyViewHold
             switch (menuItem.getItemId()) {
                 case R.id.action_add_favourite:
                     Toast.makeText(mContext, "Add to favourite", Toast.LENGTH_SHORT).show();
+
+                    Intent intent = new Intent(mContext, SettingsActivity.class);
+                    mContext.startActivity(intent);
                     return true;
                 case R.id.action_play_next:
                     Toast.makeText(mContext, "Play next", Toast.LENGTH_SHORT).show();

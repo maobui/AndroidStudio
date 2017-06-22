@@ -6,8 +6,8 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -19,6 +19,8 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.maobuidinh.glideimage.R;
 import com.example.maobuidinh.glideimage.adapter.GalleryAdapter;
 import com.example.maobuidinh.glideimage.app.AppController;
+import com.example.maobuidinh.glideimage.helper.EndlessRecyclerViewScrollListener;
+import com.example.maobuidinh.glideimage.helper.PaginationScrollListener;
 import com.example.maobuidinh.glideimage.model.Image;
 import com.example.maobuidinh.glideimage.util.Utils;
 
@@ -29,21 +31,25 @@ import org.json.JSONObject;
 import java.io.InputStream;
 import java.util.ArrayList;
 
+import static com.example.maobuidinh.glideimage.config.Config.*;
+
 public class MainActivity extends AppCompatActivity {
 
     private String TAG = MainActivity.class.getSimpleName();
-//    private static final String endpoint = "http://api.androidhive.info/json/glide.json";
-    private static final String endpoint = "https://raw.githubusercontent.com/maobui/AndroidStudio/master/GlideImage/glide.json";
-//    private static final String endpoint_dynamic = "https://api.flickr.com/services/feeds/photos_faves.gne?nsid=38041819@N04&format=json&nojsoncallback=1";
-    private static final String endpoint_dynamic = "http://api.flickr.com/services/feeds/photos_public.gne?nsid=hoangchino_photographer&format=json&nojsoncallback=1";
+
+
+    private static final int START_PAGE = 1;
+    private static final int END_PAGE = 5;
+    private static  int current_page = 0;
+    private PaginationScrollListener mPaginationScrollListener;
+    private EndlessRecyclerViewScrollListener mEndlessRecyclerViewScrollListener;
+
     private ArrayList<Image> images;
     private ProgressDialog pDialog;
     private GalleryAdapter mAdapter;
     private RecyclerView recyclerView;
 
     private final int SPANCOUNT = 2;
-
-    private boolean mUseFromDynamicServer = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,9 +63,11 @@ public class MainActivity extends AppCompatActivity {
 
         pDialog = new ProgressDialog(this);
         images = new ArrayList<>();
+        images.clear();
         mAdapter = new GalleryAdapter(getApplicationContext(), images);
 
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getApplicationContext(), SPANCOUNT);
+//        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getApplicationContext(), SPANCOUNT);
+        final RecyclerView.LayoutManager mLayoutManager = new StaggeredGridLayoutManager(SPANCOUNT, StaggeredGridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
@@ -83,13 +91,53 @@ public class MainActivity extends AppCompatActivity {
             }
         }));
 
-        if (mUseFromDynamicServer)
+        current_page = START_PAGE;
+        if (isUseDynamicServer)
         {
-//            fetchImagesDynamic();
-            fetchImagesFromFlickr();
+            if (isUseVolley) {
+                fetchImagesFromFlickr(current_page);
+            } else {
+                fetchImagesDynamic(current_page);
+            }
         } else {
             fetchImages();
         }
+
+
+        if (isUSePaginationScrollListenner) {
+            mPaginationScrollListener = new PaginationScrollListener(new PaginationScrollListener.RefreshList() {
+                @Override
+                public void onRefresh(int pageNumber) {
+                    if (pageNumber <= END_PAGE){
+                        if (isUseVolley) {
+                            fetchImagesFromFlickr(pageNumber);
+                        } else {
+                            fetchImagesDynamic(pageNumber);
+                        }
+                        current_page = mPaginationScrollListener.getcurrentPage();
+                    } else {
+                        mPaginationScrollListener.noMorePages();
+                    }
+                    Log.d(TAG, "*********** current page : " + current_page);
+                }
+            },current_page);
+            mPaginationScrollListener.resetState();
+            recyclerView.addOnScrollListener(mPaginationScrollListener);
+        } else if (isUseEndlessScrollListenner) {
+            mEndlessRecyclerViewScrollListener = new EndlessRecyclerViewScrollListener((StaggeredGridLayoutManager) mLayoutManager) {
+                @Override
+                public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                    if (page <= END_PAGE){
+                        fetchImagesFromFlickr(page);
+                        current_page = page;
+                    }
+                    Log.d(TAG, "*********** current page : " + current_page);
+                }
+            };
+            mEndlessRecyclerViewScrollListener.resetState();
+            recyclerView.addOnScrollListener(mEndlessRecyclerViewScrollListener);
+        }
+
     }
 
     private void fetchImages() {
@@ -97,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
         pDialog.setMessage("Downloading json...");
         pDialog.show();
 
-        JsonArrayRequest req = new JsonArrayRequest(endpoint,
+        JsonArrayRequest req = new JsonArrayRequest(ENDPOINT,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
@@ -138,12 +186,13 @@ public class MainActivity extends AppCompatActivity {
         AppController.getInstance().addToRequestQueue(req);
     }
 
-    private void fetchImagesFromFlickr() {
+    private void fetchImagesFromFlickr(int page) {
 
+        Log.d(TAG, "*********** fetchImagesFromFlickr from page : " + page);
         pDialog.setMessage("Downloading json...");
         pDialog.show();
 
-        JsonObjectRequest req = new JsonObjectRequest(endpoint_dynamic,
+        JsonObjectRequest req = new JsonObjectRequest(ENDPOINT_DYNAMIC + page,
                 null,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -153,6 +202,10 @@ public class MainActivity extends AppCompatActivity {
 
                         JsonParser(response.toString());
                         mAdapter.notifyDataSetChanged();
+
+                        if (isUSePaginationScrollListenner && mPaginationScrollListener != null){
+                            mPaginationScrollListener.notifyMorePages();
+                        }
                     }},
                 new Response.ErrorListener(){
                         @Override
@@ -166,8 +219,9 @@ public class MainActivity extends AppCompatActivity {
         AppController.getInstance().addToRequestQueue(req);
     }
 
-    private void fetchImagesDynamic() {
-        new GetJson().execute(endpoint_dynamic);
+    private void fetchImagesDynamic(int page) {
+        Log.d(TAG, "*********** fetchImagesDynamic from page : " + page);
+        new GetJson().execute(ENDPOINT_DYNAMIC + page);
     }
 
 
@@ -191,16 +245,20 @@ public class MainActivity extends AppCompatActivity {
             if (pDialog.isShowing())
                 pDialog.dismiss();
             /**
-             * Updating parsed JSON data into ListView
+             * Updating parsed JSON data into RecylerView.
              * */
             JsonParser(result);
             mAdapter.notifyDataSetChanged();
+
+            if (isUSePaginationScrollListenner && mPaginationScrollListener != null){
+                mPaginationScrollListener.notifyMorePages();
+            }
         }
 
         @Override
         protected String doInBackground(String... params) {
             // Get data from server.
-            InputStream in = Utils.openConnection(endpoint_dynamic);
+            InputStream in = Utils.openConnection(params[0]);
             // Convert to data to String.
             String json = Utils.convertStreamToString(in);
             return json;
@@ -216,7 +274,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, "jObj  : " + jObj.toString());
                 JSONArray items = jObj.getJSONArray("items");
 
-                images.clear();
+                //images.clear();
                 for (int i = 0; i < items.length(); i ++)
                 {
                     JSONObject object = items.getJSONObject(i);

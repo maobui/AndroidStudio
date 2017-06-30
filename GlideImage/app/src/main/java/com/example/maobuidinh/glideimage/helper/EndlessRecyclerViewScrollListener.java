@@ -5,6 +5,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
+import android.view.View;
+
 
 /**
  * Created by maobuidinh on 6/19/2017.
@@ -27,11 +29,18 @@ public abstract class EndlessRecyclerViewScrollListener extends RecyclerView.OnS
     private boolean loading = true;
     // Sets the starting page index
     private int startingPageIndex = 1;// page start from 1 not 0;
+    // Custom  LinearLayoutManager
+    private static int totalItemsInView;
+    private static int defaultItemHeight;
+    private static int featuredItemHeight;
+    private static int maxDistance;
+    private static int diffHeight;
 
     RecyclerView.LayoutManager mLayoutManager;
 
     public EndlessRecyclerViewScrollListener(LinearLayoutManager layoutManager) {
         mLayoutManager = layoutManager;
+        initAttrLinearLayout();
     }
 
     public EndlessRecyclerViewScrollListener(GridLayoutManager layoutManager) {
@@ -70,6 +79,13 @@ public abstract class EndlessRecyclerViewScrollListener extends RecyclerView.OnS
             lastVisibleItemPosition = ((GridLayoutManager) mLayoutManager).findLastVisibleItemPosition();
         } else if (mLayoutManager instanceof LinearLayoutManager) {
             lastVisibleItemPosition = ((LinearLayoutManager) mLayoutManager).findLastVisibleItemPosition();
+
+            // Hack RecyclerView.
+            if (((LinearLayoutManager) mLayoutManager).getOrientation() == LinearLayoutManager.VERTICAL)
+            {
+                totalItemsInView = mLayoutManager.getItemCount();
+                changeHeightAccordingToScroll(recyclerView);
+            }
         }
 
         // If the total item count is zero and the previous isn't, assume the
@@ -99,6 +115,45 @@ public abstract class EndlessRecyclerViewScrollListener extends RecyclerView.OnS
             onLoadMore(currentPage, totalItemCount, recyclerView);
             loading = true;
         }
+    }
+
+    @Override
+    public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+        super.onScrollStateChanged(recyclerView, newState);
+    }
+
+    private void changeHeightAccordingToScroll(RecyclerView recyclerView) {
+        Log.d(TAG, "*********** call changeHeightAccordingToScroll ");
+        for (int i = 0; i < totalItemsInView; i++) {
+            View viewToBeResized = recyclerView.getChildAt(i);
+            if (viewToBeResized != null) {
+                float distance = getTopOfView(viewToBeResized);
+                //Log.d(TAG, "*********** call changeHeightAccordingToScroll distance : " + distance);
+                if (distance > maxDistance) {
+                    viewToBeResized.getLayoutParams().height = defaultItemHeight;
+                    viewToBeResized.requestLayout();
+                } else if (distance <= maxDistance) {
+                    viewToBeResized.getLayoutParams().height = (int) height(distance);
+                    viewToBeResized.requestLayout();
+                }
+                //Log.d(TAG, "*********** call changeHeightAccordingToScroll viewToBeResized.getLayoutParams().height : " + viewToBeResized.getLayoutParams().height);
+            }
+        }
+    }
+
+    private  void initAttrLinearLayout(){
+        totalItemsInView = 0;
+        defaultItemHeight = 300;
+        featuredItemHeight = 700;
+        maxDistance = featuredItemHeight;
+        diffHeight = featuredItemHeight - defaultItemHeight;
+    }
+    private float getTopOfView(View view) {
+        return Math.abs(view.getTop());
+    }
+
+    private float height(float distance) {
+        return featuredItemHeight - ((distance * (diffHeight)) / maxDistance);
     }
 
     // Call this method whenever performing new searches

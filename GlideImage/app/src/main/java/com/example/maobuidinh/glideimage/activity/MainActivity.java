@@ -6,8 +6,8 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -67,7 +67,8 @@ public class MainActivity extends AppCompatActivity {
         mAdapter = new GalleryAdapter(getApplicationContext(), images);
 
 //        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getApplicationContext(), SPANCOUNT);
-        final RecyclerView.LayoutManager mLayoutManager = new StaggeredGridLayoutManager(SPANCOUNT, StaggeredGridLayoutManager.VERTICAL);
+//        final RecyclerView.LayoutManager mLayoutManager = new StaggeredGridLayoutManager(SPANCOUNT, StaggeredGridLayoutManager.VERTICAL);
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
@@ -124,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
             mPaginationScrollListener.resetState();
             recyclerView.addOnScrollListener(mPaginationScrollListener);
         } else if (isUseEndlessScrollListenner) {
-            mEndlessRecyclerViewScrollListener = new EndlessRecyclerViewScrollListener((StaggeredGridLayoutManager) mLayoutManager) {
+            mEndlessRecyclerViewScrollListener = new EndlessRecyclerViewScrollListener( mLayoutManager) {
                 @Override
                 public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                     if (page <= END_PAGE){

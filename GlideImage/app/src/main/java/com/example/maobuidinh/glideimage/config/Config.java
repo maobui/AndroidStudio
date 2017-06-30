@@ -4,7 +4,7 @@ package com.example.maobuidinh.glideimage.config;
  * Created by maobuidinh on 6/22/2017.
  */
 
-public interface Config {
+public class Config {
 
     // URL get json.
     //public static final String endpoint = "http://api.androidhive.info/json/glide.json";
@@ -20,6 +20,13 @@ public interface Config {
     public static  boolean isUseAsyncTask = !isUseVolley;
 
     // use type of scroll listener.
-    public static boolean isUseEndlessScrollListenner = false;
+    public static boolean isUseEndlessScrollListenner = true;
     public static boolean isUSePaginationScrollListenner = !isUseEndlessScrollListenner;
+
+    // use only for Hack RecyclerReview with LinearLayoutManager.
+    public static boolean isUseHackLinearLayout = false;
+
+    // use for scroll page
+    public static final int START_PAGE = 1;
+    public static final int END_PAGE = 5;
 }

@@ -6,6 +6,8 @@ import android.os.Build;
 import android.util.AttributeSet;
 import android.widget.RelativeLayout;
 
+import static com.example.maobuidinh.glideimage.config.Config.isUseHackLinearLayout;
+
 /**
  * Created by maobuidinh on 6/10/2017.
  */
@@ -29,9 +31,14 @@ class SquareLayout extends RelativeLayout {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
-//    @Override
-//    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-//        // Set a square layout.
-//        super.onMeasure(widthMeasureSpec, widthMeasureSpec);
-//    }
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+
+        // Don't use square for feature Hack RecyclerReview with LinearLayout.
+        if (!isUseHackLinearLayout) {
+            heightMeasureSpec  = widthMeasureSpec;
+        }
+        // Set a square layout.
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+    }
 }

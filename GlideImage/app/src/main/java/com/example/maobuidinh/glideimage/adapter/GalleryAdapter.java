@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.maobuidinh.glideimage.R;
-import com.example.maobuidinh.glideimage.model.Image;
+import com.example.maobuidinh.glideimage.model.ImageTemplate;
 
 import java.util.List;
 
@@ -20,9 +20,9 @@ import java.util.List;
  * Created by maobuidinh on 6/10/2017.
  */
 
-public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHolder> {
+public class GalleryAdapter<T> extends RecyclerView.Adapter<GalleryAdapter<T>.MyViewHolder> {
 
-    private List<Image> images;
+    private List<T> images;
     private Context mContext;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -34,7 +34,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHo
         }
     }
 
-    public GalleryAdapter(Context context, List<Image> images) {
+    public GalleryAdapter(Context context, List<T> images) {
         mContext = context;
         this.images = images;
     }
@@ -49,9 +49,9 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHo
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        Image image = images.get(position);
+        T image = images.get(position);
 
-        Glide.with(mContext).load(image.getMedium())
+        Glide.with(mContext).load(((ImageTemplate) image).getSmall())
                 .thumbnail(0.5f)
                 .crossFade()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)

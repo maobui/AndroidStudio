@@ -6,60 +6,47 @@ import java.io.Serializable;
  * Created by maobuidinh on 6/10/2017.
  */
 
-public class Image implements Serializable{
+public class Image extends ImageTemplate implements Serializable {
 
     private String name;
-    private String small, medium, large;
+    private ImageUrl url;
     private String timestamp;
 
-    public Image(){
-    }
-
-    public Image(String name, String small, String medium, String large, String timestamp) {
-        this.name = name;
-        this.small = small;
-        this.medium = medium;
-        this.large = large;
-        this.timestamp = timestamp;
+    public ImageUrl getUrl() {
+        return url;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
+    @Override
     public String getSmall() {
-        return small;
+        return getUrl().getSmall();
     }
 
-    public void setSmall(String small) {
-        this.small = small;
-    }
-
+    @Override
     public String getMedium() {
-        return medium;
+        return getUrl().getMedium();
     }
 
-    public void setMedium(String medium) {
-        this.medium = medium;
-    }
-
+    @Override
     public String getLarge() {
-        return large;
+        return getUrl().getLarge();
     }
 
-    public void setLarge(String large) {
-        this.large = large;
+    @Override
+    public String getTitle() {
+        return this.getName();
+    }
+
+    @Override
+    public String getPublished() {
+        return this.getTimestamp();
     }
 
     public String getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(String timestamp) {
-        this.timestamp = timestamp;
-    }
 }

@@ -17,6 +17,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.maobuidinh.glideimage.R;
 import com.example.maobuidinh.glideimage.model.Image;
+import com.example.maobuidinh.glideimage.model.ImageFlickr;
+import com.example.maobuidinh.glideimage.model.ImageTemplate;
 
 import java.util.ArrayList;
 
@@ -24,10 +26,10 @@ import java.util.ArrayList;
  * Created by maobuidinh on 6/10/2017.
  */
 
-public class SlideshowDialogFragment extends DialogFragment {
+public class SlideshowDialogFragment<T> extends DialogFragment {
 
     private String TAG = SlideshowDialogFragment.class.getSimpleName();
-    private ArrayList<Image> images;
+    private ArrayList<T> images;
     private ViewPager viewPager;
     private MyViewPagerAdapter myViewPagerAdapter;
     private TextView lblCount, lblTitle, lblDate;
@@ -47,7 +49,7 @@ public class SlideshowDialogFragment extends DialogFragment {
         lblTitle = (TextView) v.findViewById(R.id.title);
         lblDate = (TextView) v.findViewById(R.id.date);
 
-        images = (ArrayList<Image>) getArguments().getSerializable("images");
+        images = (ArrayList<T>) getArguments().getSerializable("images");
         selectedPosition = getArguments().getInt("position");
 
         Log.e(TAG, "position: " + selectedPosition);
@@ -89,9 +91,12 @@ public class SlideshowDialogFragment extends DialogFragment {
     private void displayMetaInfo(int position) {
         lblCount.setText((position + 1) + " of " + images.size());
 
-        Image image = images.get(position);
-        lblTitle.setText(image.getName());
-        lblDate.setText(image.getTimestamp());
+        T image = images.get(position);
+        if (image instanceof Image || image instanceof ImageFlickr)
+        {
+            lblTitle.setText(((ImageTemplate)image).getTitle());
+            lblDate.setText(((ImageTemplate)image).getPublished());
+        }
     }
 
     @Override
@@ -116,9 +121,9 @@ public class SlideshowDialogFragment extends DialogFragment {
 
             ImageView imageViewPreview = (ImageView) view.findViewById(R.id.image_preview);
 
-            Image image = images.get(position);
+            T image = images.get(position);
 
-            Glide.with(getActivity()).load(image.getLarge())
+            Glide.with(getActivity()).load(((ImageTemplate)image).getLarge())
                     .thumbnail(0.5f)
                     .crossFade()
                     .diskCacheStrategy(DiskCacheStrategy.ALL)

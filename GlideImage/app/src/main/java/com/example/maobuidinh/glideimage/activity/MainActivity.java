@@ -6,8 +6,8 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -22,29 +22,39 @@ import com.example.maobuidinh.glideimage.app.AppController;
 import com.example.maobuidinh.glideimage.helper.EndlessRecyclerViewScrollListener;
 import com.example.maobuidinh.glideimage.helper.PaginationScrollListener;
 import com.example.maobuidinh.glideimage.model.Image;
+import com.example.maobuidinh.glideimage.model.ImageFlickr;
+import com.example.maobuidinh.glideimage.model.JsonFlickr;
 import com.example.maobuidinh.glideimage.util.Utils;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.InputStream;
 import java.util.ArrayList;
 
-import static com.example.maobuidinh.glideimage.config.Config.*;
+import static com.example.maobuidinh.glideimage.config.Config.ENDPOINT;
+import static com.example.maobuidinh.glideimage.config.Config.ENDPOINT_DYNAMIC;
+import static com.example.maobuidinh.glideimage.config.Config.END_PAGE;
+import static com.example.maobuidinh.glideimage.config.Config.START_PAGE;
+import static com.example.maobuidinh.glideimage.config.Config.isUSePaginationScrollListenner;
+import static com.example.maobuidinh.glideimage.config.Config.isUseDynamicServer;
+import static com.example.maobuidinh.glideimage.config.Config.isUseEndlessScrollListenner;
+import static com.example.maobuidinh.glideimage.config.Config.isUseVolley;
 
 public class MainActivity extends AppCompatActivity {
 
     private String TAG = MainActivity.class.getSimpleName();
 
 
-    private static final int START_PAGE = 1;
-    private static final int END_PAGE = 5;
+
     private static  int current_page = 0;
     private PaginationScrollListener mPaginationScrollListener;
     private EndlessRecyclerViewScrollListener mEndlessRecyclerViewScrollListener;
 
-    private ArrayList<Image> images;
+    private ArrayList<Image> mImages;
+    private ArrayList<ImageFlickr> mImageFlickrs;
     private ProgressDialog pDialog;
     private GalleryAdapter mAdapter;
     private RecyclerView recyclerView;
@@ -62,13 +72,22 @@ public class MainActivity extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
         pDialog = new ProgressDialog(this);
-        images = new ArrayList<>();
-        images.clear();
-        mAdapter = new GalleryAdapter(getApplicationContext(), images);
+        mImages = new ArrayList<>();
+        mImageFlickrs = new ArrayList<>();
+        mImages.clear();
+        if (isUseDynamicServer){
+            mAdapter = new GalleryAdapter(getApplicationContext(), mImageFlickrs);
+        } else {
+            mAdapter = new GalleryAdapter(getApplicationContext(), mImages);
+        }
 
 //        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getApplicationContext(), SPANCOUNT);
-//        final RecyclerView.LayoutManager mLayoutManager = new StaggeredGridLayoutManager(SPANCOUNT, StaggeredGridLayoutManager.VERTICAL);
-        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+        StaggeredGridLayoutManager mLayoutManager = new StaggeredGridLayoutManager(SPANCOUNT, StaggeredGridLayoutManager.VERTICAL);
+//        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+//        if (mLayoutManager instanceof LinearLayoutManager){
+//            isUseHackLinearLayout = true;
+//        }
+
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
@@ -77,7 +96,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view, int position) {
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("images", images);
+                if (isUseDynamicServer) {
+                    bundle.putSerializable("images", mImageFlickrs);
+                } else {
+                    bundle.putSerializable("images", mImages);
+                }
                 bundle.putInt("position", position);
 
                 FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -152,27 +175,8 @@ public class MainActivity extends AppCompatActivity {
                     public void onResponse(JSONArray response) {
                         Log.d(TAG, response.toString());
                         pDialog.hide();
-
-                        images.clear();
-                        for (int i = 0; i < response.length(); i++) {
-                            try {
-                                JSONObject object = response.getJSONObject(i);
-                                Image image = new Image();
-                                image.setName(object.getString("name"));
-
-                                JSONObject url = object.getJSONObject("url");
-                                image.setSmall(url.getString("small"));
-                                image.setMedium(url.getString("medium"));
-                                image.setLarge(url.getString("large"));
-                                image.setTimestamp(object.getString("timestamp"));
-
-                                images.add(image);
-
-                            } catch (JSONException e) {
-                                Log.e(TAG, "Json parsing error: " + e.getMessage());
-                            }
-                        }
-
+                        mImages.clear();
+                        JsonParser(response.toString());
                         mAdapter.notifyDataSetChanged();
                     }
                 }, new Response.ErrorListener() {
@@ -269,32 +273,25 @@ public class MainActivity extends AppCompatActivity {
     private void JsonParser (String strJson){
         if (strJson != null)
         {
+            Gson gson = new Gson();
             // try parse the string to a JSON object
-            try {
-                JSONObject jObj = new JSONObject(strJson);
-                Log.d(TAG, "jObj  : " + jObj.toString());
-                JSONArray items = jObj.getJSONArray("items");
-
-                //images.clear();
-                for (int i = 0; i < items.length(); i ++)
-                {
-                    JSONObject object = items.getJSONObject(i);
-                    JSONObject media = object.getJSONObject("media");
-
-                    String name = object.getString("title");
-                    String small = media.getString("m");
-                    String medium = media.getString("m");
-                    String large = media.getString("m");
-                    large = large.replace("_m.jpg", "_b.jpg");
-                    String timestamp = object.getString("date_taken");
-                    Log.d(TAG, "media  : " + media.getString("m"));
-
-                    Image image = new Image(name, small, medium, large, timestamp);
-                    images.add(image);
+            if (isUseDynamicServer) {
+                try {
+                    mImageFlickrs.addAll(gson.fromJson(strJson, JsonFlickr.class).getImageFlickrs());
+                    for (ImageFlickr img : mImageFlickrs) {
+                        Log.d(TAG, "**** getLinkLarge : " + img.getLarge());
+                    }
+                } catch (Exception e) {
+                    Log.e(TAG, "Error parsing data " + e.toString());
                 }
+            } else {
 
-            } catch (JSONException e) {
-                Log.e(TAG, "Error parsing data " + e.toString());
+                try {
+                    ArrayList<Image> imageArrayList = gson.fromJson(strJson,new TypeToken<ArrayList<Image>>(){}.getType());
+                    mImages.addAll(imageArrayList);
+                } catch (Exception e) {
+                    Log.e(TAG, "Json parsing error: " + e.getMessage());
+                }
             }
         } else {
             Log.e(TAG, "JsonParser null !!! ");
@@ -324,7 +321,7 @@ public class MainActivity extends AppCompatActivity {
 *   https://farm{farm-id}.staticflickr.com/{server-id}/{id}_{o-secret}_o.(jpg|gif|png)
 * s	small square 75x75
 * q	large square 150x150
-* t	thumbnail, 100 on longest side
+* t	thumbnailthumbnail, 100 on longest side
 * m	small, 240 on longest side
 * n	small, 320 on longest side
 * -	medium, 500 on longest side

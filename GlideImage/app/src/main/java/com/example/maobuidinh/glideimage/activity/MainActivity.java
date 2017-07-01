@@ -22,7 +22,7 @@ import com.example.maobuidinh.glideimage.app.AppController;
 import com.example.maobuidinh.glideimage.helper.EndlessRecyclerViewScrollListener;
 import com.example.maobuidinh.glideimage.helper.PaginationScrollListener;
 import com.example.maobuidinh.glideimage.model.Image;
-import com.example.maobuidinh.glideimage.model.ImageFlickr;
+import com.example.maobuidinh.glideimage.model.Item;
 import com.example.maobuidinh.glideimage.model.JsonFlickr;
 import com.example.maobuidinh.glideimage.util.Utils;
 import com.google.gson.Gson;
@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
     private EndlessRecyclerViewScrollListener mEndlessRecyclerViewScrollListener;
 
     private ArrayList<Image> mImages;
-    private ArrayList<ImageFlickr> mImageFlickrs;
+    private ArrayList<Item> mImageFlickrs;
     private ProgressDialog pDialog;
     private GalleryAdapter mAdapter;
     private RecyclerView recyclerView;
@@ -277,8 +277,8 @@ public class MainActivity extends AppCompatActivity {
             // try parse the string to a JSON object
             if (isUseDynamicServer) {
                 try {
-                    mImageFlickrs.addAll(gson.fromJson(strJson, JsonFlickr.class).getImageFlickrs());
-                    for (ImageFlickr img : mImageFlickrs) {
+                    mImageFlickrs.addAll(gson.fromJson(strJson, JsonFlickr.class).getItems());
+                    for (Item img : mImageFlickrs) {
                         Log.d(TAG, "**** getLinkLarge : " + img.getLarge());
                     }
                 } catch (Exception e) {

@@ -6,13 +6,13 @@ import com.google.gson.annotations.SerializedName;
  * Created by maobuidinh on 6/30/2017.
  */
 
-public class ImageFlickr extends ImageTemplate{
+public class Item extends ImageTemplate{
 
     private String title;
 
     private String link;
 
-    private MediaFlickr media;
+    private Media media;
 
     @SerializedName("date_taken")
     private String dateTaken;
@@ -33,28 +33,28 @@ public class ImageFlickr extends ImageTemplate{
         return title;
     }
 
-    public MediaFlickr getMedia() {
+    public Media getMedia() {
         return media;
     }
 
     @Override
     public String getSmall(){
-        MediaFlickr mediaFlickr = this.getMedia();
-        return mediaFlickr.getM();
+        Media media = this.getMedia();
+        return media.getM();
     }
 
     @Override
     public String getMedium(){
-        MediaFlickr mediaFlickr = this.getMedia();
-        String linkMedium = mediaFlickr.getM();
+        Media media = this.getMedia();
+        String linkMedium = media.getM();
         linkMedium = linkMedium.replace("_m.jpg", "_c.jpg");
         return linkMedium;
     }
 
     @Override
     public String getLarge(){
-        MediaFlickr mediaFlickr = this.getMedia();
-        String linkLarge = mediaFlickr.getM();
+        Media media = this.getMedia();
+        String linkLarge = media.getM();
         linkLarge = linkLarge.replace("_m.jpg", "_b.jpg");
         return linkLarge;
     }

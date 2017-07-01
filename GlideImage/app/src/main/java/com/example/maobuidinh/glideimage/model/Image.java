@@ -1,18 +1,16 @@
 package com.example.maobuidinh.glideimage.model;
 
-import java.io.Serializable;
-
 /**
  * Created by maobuidinh on 6/10/2017.
  */
 
-public class Image extends ImageTemplate implements Serializable {
+public class Image extends ImageTemplate {
 
     private String name;
-    private ImageUrl url;
+    private Url url;
     private String timestamp;
 
-    public ImageUrl getUrl() {
+    public Url getUrl() {
         return url;
     }
 

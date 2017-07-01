@@ -21,10 +21,10 @@ public class JsonFlickr {
     private String generator;
 
     @SerializedName("items")
-    private ArrayList<ImageFlickr> mImageFlickrs;
+    private ArrayList<Item> items;
 
-    public ArrayList<ImageFlickr> getImageFlickrs() {
-        return mImageFlickrs;
+    public ArrayList<Item> getItems() {
+        return items;
     }
 
 }

@@ -17,7 +17,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.maobuidinh.glideimage.R;
 import com.example.maobuidinh.glideimage.model.Image;
-import com.example.maobuidinh.glideimage.model.ImageFlickr;
+import com.example.maobuidinh.glideimage.model.Item;
 import com.example.maobuidinh.glideimage.model.ImageTemplate;
 
 import java.util.ArrayList;
@@ -92,7 +92,7 @@ public class SlideshowDialogFragment<T> extends DialogFragment {
         lblCount.setText((position + 1) + " of " + images.size());
 
         T image = images.get(position);
-        if (image instanceof Image || image instanceof ImageFlickr)
+        if (image instanceof Image || image instanceof Item)
         {
             lblTitle.setText(((ImageTemplate)image).getTitle());
             lblDate.setText(((ImageTemplate)image).getPublished());

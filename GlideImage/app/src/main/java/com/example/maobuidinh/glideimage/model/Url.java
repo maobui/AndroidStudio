@@ -4,7 +4,7 @@ package com.example.maobuidinh.glideimage.model;
  * Created by maobuidinh on 6/30/2017.
  */
 
-public class ImageUrl {
+public class Url {
 
     private String small;
 

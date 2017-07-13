@@ -26,10 +26,14 @@
 
     <PreferenceCategory android:title="@string/pref_title_notifications">
 
-        <SwitchPreference
+        <!--<SwitchPreference-->
+        <!--Use SwitchCompat Preference for ANDROID_VERSION < 5.0 -->
+        <!--Only use ChexBoxPreference with android:widgetLayout="@layout/pref_switch" -->
+        <CheckBoxPreference
             android:defaultValue="true"
             android:key="@string/notifications_new_message"
-            android:title="@string/title_new_notification_sound" />
+            android:title="@string/title_new_notification_sound"
+            android:widgetLayout="@layout/pref_switch"/>
 
         <RingtonePreference
             android:defaultValue="content://settings/system/notification_sound"

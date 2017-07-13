@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements PaginationAdapter
         });
 
         //init service and load data
-        movieService = MovieApi.getClient(getApplicationContext()).create(MovieService.class);
+        movieService = MovieApi.getClient().create(MovieService.class);
 
         loadFirstPage();
 

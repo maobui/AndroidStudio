@@ -60,4 +60,22 @@ public class Book extends RealmObject {
         this.imageUrl = imageUrl;
     }
 
+//    public Book(int id, String title, String description, String author, String imageUrl) {
+//        this.id = id;
+//        this.title = title;
+//        this.description = description;
+//        this.author = author;
+//        this.imageUrl = imageUrl;
+//    }
+//
+//    public Book() {
+//    }
+//
+//    public Book(Book book) {
+//        this.id = book.getId();
+//        this.title = book.getTitle();
+//        this.description = book.getDescription();
+//        this.author = book.getAuthor();
+//        this.imageUrl = book.getImageUrl();
+//    }
 }

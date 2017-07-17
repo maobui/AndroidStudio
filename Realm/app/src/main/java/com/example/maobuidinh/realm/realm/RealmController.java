@@ -51,10 +51,10 @@ public class RealmController {
         return instance;
     }
 
-    public Realm getRealm() {
-
-        return realm;
-    }
+//    public Realm getRealm() {
+//
+//        return realm;
+//    }
 
     //Refresh the realm istance
     public void refresh() {
@@ -100,12 +100,29 @@ public class RealmController {
         RealmResults<Book> results = this.getBooks();
         realm.beginTransaction();
         // remove single match
-        results.remove(position);
+        //results.remove(position);
 
         //other way.
-//        Book book = results.get(position);
-//        book.removeFromRealm();
+        Book book = results.get(position);
+        book.removeFromRealm();
 
+        realm.commitTransaction();
+    }
+
+    // update a book with the given location
+    public void updateBookLocation(int position, String author, String title, String imageUrl) {
+        RealmResults<Book> results = this.getBooks();
+        realm.beginTransaction();
+        results.get(position).setAuthor(author);
+        results.get(position).setTitle(title);
+        results.get(position).setImageUrl(imageUrl);
+        realm.commitTransaction();
+    }
+
+    // add a book
+    public void addBook( Book book){
+        realm.beginTransaction();
+        realm.copyToRealm(book);
         realm.commitTransaction();
     }
 

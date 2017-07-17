@@ -19,9 +19,6 @@ import com.example.maobuidinh.realm.helper.PrefManager;
 import com.example.maobuidinh.realm.model.Book;
 import com.example.maobuidinh.realm.realm.RealmController;
 
-import io.realm.Realm;
-import io.realm.RealmResults;
-
 /**
  * Created by mao.buidinh on 7/17/2017.
  */
@@ -29,7 +26,7 @@ import io.realm.RealmResults;
 public class BookAdapter extends RealmRecyclerViewAdapter<Book> {
 
     final Context context;
-    private Realm realm;
+    private RealmController mRealmController;
     private LayoutInflater inflater;
 
     public BookAdapter(Context context) {
@@ -46,7 +43,7 @@ public class BookAdapter extends RealmRecyclerViewAdapter<Book> {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
 
-        realm = RealmController.getInstance().getRealm();
+        mRealmController = RealmController.getInstance();
 
         // get the article
         final Book book = getItem(position);
@@ -72,20 +69,14 @@ public class BookAdapter extends RealmRecyclerViewAdapter<Book> {
             @Override
             public boolean onLongClick(View v) {
 
-                RealmResults<Book> results = realm.where(Book.class).findAll();
-
                 // Get the book title to show it in toast message
-                Book b = results.get(position);
+                Book b = mRealmController.getBookLocation(position);
                 String title = b.getTitle();
 
-                // All changes to data must happen in a transaction
-                realm.beginTransaction();
+               // remove single match
+                mRealmController.removeBookLocation(position);
 
-                // remove single match
-                results.remove(position);
-                realm.commitTransaction();
-
-                if (results.size() == 0) {
+                if (!mRealmController.hasBooks()) {
                     PrefManager.with(context).setPreLoad(false);
                 }
 
@@ -119,14 +110,7 @@ public class BookAdapter extends RealmRecyclerViewAdapter<Book> {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
 
-                                RealmResults<Book> results = realm.where(Book.class).findAll();
-
-                                realm.beginTransaction();
-                                results.get(position).setAuthor(editAuthor.getText().toString());
-                                results.get(position).setTitle(editTitle.getText().toString());
-                                results.get(position).setImageUrl(editThumbnail.getText().toString());
-
-                                realm.commitTransaction();
+                                mRealmController.updateBookLocation(position,editAuthor.getText().toString(),editTitle.getText().toString(), editThumbnail.getText().toString() );
 
                                 notifyDataSetChanged();
                             }

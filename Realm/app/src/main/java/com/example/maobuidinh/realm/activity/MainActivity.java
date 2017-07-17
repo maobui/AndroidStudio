@@ -22,7 +22,6 @@ import com.example.maobuidinh.realm.realm.RealmController;
 
 import java.util.ArrayList;
 
-import io.realm.Realm;
 import io.realm.RealmResults;
 
 public class MainActivity extends AppCompatActivity {
@@ -30,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
 
     private BookAdapter adapter;
-    private Realm realm;
+    private RealmController mRealmController;
     private LayoutInflater inflater;
     private FloatingActionButton fab;
     private RecyclerView recycler;
@@ -44,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         recycler = (RecyclerView) findViewById(R.id.recycler);
 
         //get realm instance
-        this.realm = RealmController.with(this).getRealm();
+        this.mRealmController = RealmController.with(this);
 
         //set toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -94,9 +93,7 @@ public class MainActivity extends AppCompatActivity {
                                     Toast.makeText(MainActivity.this, "Entry not saved, missing title", Toast.LENGTH_SHORT).show();
                                 } else {
                                     // Persist your data easily
-                                    realm.beginTransaction();
-                                    realm.copyToRealm(book);
-                                    realm.commitTransaction();
+                                    mRealmController.addBook(book);
 
                                     adapter.notifyDataSetChanged();
 
@@ -183,20 +180,10 @@ public class MainActivity extends AppCompatActivity {
 
         for (Book b : books) {
             // Persist your data easily
-            realm.beginTransaction();
-            realm.copyToRealm(b);
-            realm.commitTransaction();
+            mRealmController.addBook(b);
         }
 
         PrefManager.with(this).setPreLoad(true);
 
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-        //close the Realm instance
-        RealmController.with(this).close();
     }
 }

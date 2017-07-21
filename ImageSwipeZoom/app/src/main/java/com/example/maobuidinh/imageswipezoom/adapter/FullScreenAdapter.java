@@ -10,10 +10,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.example.maobuidinh.imageswipezoom.R;
+import com.example.maobuidinh.imageswipezoom.helper.TouchImageView;
 
 import java.util.ArrayList;
 
@@ -45,7 +45,7 @@ public class FullScreenAdapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
-        ImageView imgDisplay;
+        TouchImageView imgDisplay;
         Button btnClose;
 
         inflater = (LayoutInflater) _activity
@@ -53,7 +53,7 @@ public class FullScreenAdapter extends PagerAdapter {
         View viewLayout = inflater.inflate(R.layout.full_view, container,
                 false);
 
-        imgDisplay = (ImageView) viewLayout.findViewById(R.id.imgDisplay);
+        imgDisplay = (TouchImageView) viewLayout.findViewById(R.id.imgDisplay);
         btnClose = (Button) viewLayout.findViewById(R.id.btnClose);
 
         BitmapFactory.Options options = new BitmapFactory.Options();

@@ -48,82 +48,82 @@ public class SplashActivity extends AppCompatActivity {
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET, url,
                 null, new Response.Listener<JSONObject>() {
 
-                @Override
-                public void onResponse(JSONObject response) {
-                    Log.d(TAG, "Albums Response: " + response.toString());
-                    List<Category> albums = new ArrayList<Category>();
-                    try {
-                        // Parsing the json response
-                        JSONArray entry = response.getJSONObject(TAG_FEED).getJSONArray(TAG_ENTRY);
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.d(TAG, "Albums Response: " + response.toString());
+                List<Category> albums = new ArrayList<Category>();
+                try {
+                    // Parsing the json response
+                    JSONArray entry = response.getJSONObject(TAG_FEED).getJSONArray(TAG_ENTRY);
 
-                        // loop through albums nodes and add them to album
-                        // list
-                        for (int i = 0; i < entry.length(); i++) {
-                            JSONObject albumObj = (JSONObject) entry.get(i);
-                            // album id
-                            String albumId = albumObj.getJSONObject(TAG_GPHOTO_ID).getString(TAG_T);
+                    // loop through albums nodes and add them to album
+                    // list
+                    for (int i = 0; i < entry.length(); i++) {
+                        JSONObject albumObj = (JSONObject) entry.get(i);
+                        // album id
+                        String albumId = albumObj.getJSONObject(TAG_GPHOTO_ID).getString(TAG_T);
 
-                            // album title
-                            String albumTitle = albumObj.getJSONObject(TAG_ALBUM_TITLE).getString(TAG_T);
+                        // album title
+                        String albumTitle = albumObj.getJSONObject(TAG_ALBUM_TITLE).getString(TAG_T);
 
-                            Category album = new Category();
-                            album.setId(albumId);
-                            album.setTitle(albumTitle);
+                        Category album = new Category();
+                        album.setId(albumId);
+                        album.setTitle(albumTitle);
 
-                            // add album to list
-                            albums.add(album);
+                        // add album to list
+                        albums.add(album);
 
-                            Log.d(TAG, "Album Id: " + albumId + ", Album Title: " + albumTitle);
-                        }
-
-                        // Store albums in shared pref
-                        AppController.getInstance().getPrefManager().storeCategories(albums);
-
-                        // String the main activity
-                        Intent intent = new Intent(getApplicationContext(),  MainActivity.class);
-                        startActivity(intent);
-                        // closing spalsh activity
-                        finish();
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        Toast.makeText(getApplicationContext(), getString(R.string.msg_unknown_error),
-                                Toast.LENGTH_LONG).show();
+                        Log.d(TAG, "Album Id: " + albumId + ", Album Title: " + albumTitle);
                     }
 
-                }
-            }, new Response.ErrorListener() {
+                    // Store albums in shared pref
+                    AppController.getInstance().getPrefManager().storeCategories(albums);
 
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Log.e(TAG, "Volley Error: " + error.getMessage());
+                    // String the main activity
+                    Intent intent = new Intent(getApplicationContext(),  MainActivity.class);
+                    startActivity(intent);
+                    // closing spalsh activity
+                    finish();
 
-                    // show error toast
-                    Toast.makeText(getApplicationContext(), getString(R.string.splash_error),
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(getApplicationContext(), getString(R.string.msg_unknown_error),
                             Toast.LENGTH_LONG).show();
-
-                    // Unable to fetch albums
-                    // check for existing Albums data in Shared Preferences
-                    if (AppController.getInstance().getPrefManager().getCategories() != null
-                            && AppController.getInstance().getPrefManager().getCategories().size() > 0) {
-                        // String the main activity
-                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                        startActivity(intent);
-                        // closing spalsh activity
-                        finish();
-                    } else {
-                        // Albums data not present in the shared preferences
-                        // Launch settings activity, so that user can modify
-                        // the settings
-
-                        Intent i = new Intent(SplashActivity.this,  SettingActivity.class);
-                        // clear all the activities
-                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(i);
-                    }
-
                 }
-            });
+
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "Volley Error: " + error.getMessage());
+
+                // show error toast
+                Toast.makeText(getApplicationContext(), getString(R.string.splash_error),
+                        Toast.LENGTH_LONG).show();
+
+                // Unable to fetch albums
+                // check for existing Albums data in Shared Preferences
+                if (AppController.getInstance().getPrefManager().getCategories() != null
+                        && AppController.getInstance().getPrefManager().getCategories().size() > 0) {
+                    // String the main activity
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    startActivity(intent);
+                    // closing spalsh activity
+                    finish();
+                } else {
+                    // Albums data not present in the shared preferences
+                    // Launch settings activity, so that user can modify
+                    // the settings
+
+                    Intent i = new Intent(SplashActivity.this,  SettingActivity.class);
+                    // clear all the activities
+                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(i);
+                }
+
+            }
+        });
 
         // disable the cache for this request, so that it always fetches updated
         // json

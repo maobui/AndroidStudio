@@ -2,11 +2,13 @@ package com.example.maobuidinh.wallpapers.util;
 
 import android.app.WallpaperManager;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.os.Build;
 import android.os.Environment;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Display;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -102,4 +104,13 @@ public class Utils {
                     Toast.LENGTH_SHORT).show();
         }
     }
+
+    /**
+     * Converting dp to pixel
+     */
+    public int dpToPx(int dp) {
+        Resources r = mContext.getResources();
+        return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
+    }
+
 }

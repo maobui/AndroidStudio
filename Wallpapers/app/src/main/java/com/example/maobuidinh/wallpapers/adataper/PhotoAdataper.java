@@ -37,7 +37,7 @@ public class PhotoAdataper extends RecyclerView.Adapter<PhotoAdataper.ItemViewHo
 
     @Override
     public ItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View converView = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_item_photo, parent, false);
+        View converView = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_item, parent, false);
         return new ItemViewHolder(converView);
     }
 

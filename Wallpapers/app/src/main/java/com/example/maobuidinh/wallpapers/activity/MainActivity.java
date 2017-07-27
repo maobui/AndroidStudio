@@ -175,6 +175,7 @@ public class MainActivity extends AppCompatActivity
         }
 
         if (fragment != null){
+            Log.e(TAG, "Display fragment " + position);
             FragmentManager fragmentManager = getFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.frame_container, fragment).commit();
 

@@ -91,7 +91,7 @@ public class PhotoFragment extends Fragment {
             mSelectAlbumId = null;
         }
 
-        View rootView = inflater.inflate(R.layout.content_main, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_photo, container, false);
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recycler);
         mRecyclerView.setVisibility(View.GONE);
         mProgressBar = (ProgressBar) rootView.findViewById(pbLoader);

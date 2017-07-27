@@ -30,7 +30,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
-        <activity android:name=".activity.SettingActivity">
+        <activity android:name=".activity.SettingActivity"
+                  android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".activity.FullScreenActivity"
+                  android:screenOrientation="portrait">
         </activity>
     </application>
 

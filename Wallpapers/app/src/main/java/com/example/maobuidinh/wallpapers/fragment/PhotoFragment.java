@@ -52,7 +52,7 @@ public class PhotoFragment extends Fragment {
     private Utils mUtils;
     private RecyclerView mRecyclerView;
     private PhotoAdataper mPhotoAdataper;
-    private int mColumnWidth;
+    private int mColumnWidth = 2;
     private List<Wallpaper> mWallpaperList;
     private ProgressBar mProgressBar;
     private PrefManager mPrefManager;

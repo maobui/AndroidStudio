@@ -19,5 +19,5 @@
     <color name="action_bar">#141416</color>
     <color name="action_bar_title">#ffffff</color>
     <color name="white">#ffffff</color>
-    <color name="settings_label">#323232</color>
+    <color name="settings_label">#ffffff</color>
 </resources>

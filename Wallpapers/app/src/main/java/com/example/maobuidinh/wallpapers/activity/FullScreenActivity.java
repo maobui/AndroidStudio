@@ -63,7 +63,7 @@ public class FullScreenActivity extends AppCompatActivity  implements View.OnCli
         m_pbLoader = (ProgressBar) findViewById(pbLoader);
 
         // hide the action bar in fullscreen mode
-        getActionBar().hide();
+        getSupportActionBar().hide();
 
         mUtils = new Utils(getApplicationContext());
 

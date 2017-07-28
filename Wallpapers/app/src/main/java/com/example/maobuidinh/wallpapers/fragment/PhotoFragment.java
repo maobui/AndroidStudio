@@ -149,7 +149,7 @@ public class PhotoFragment extends Fragment {
             url = AppConstant.URL_RECENTLY_ADDED.replace("_PICASA_USER_", mPrefManager.getGoogleUserName());
         } else {
             // Others album url
-            url = AppConstant.URL_RECENTLY_ADDED.replace("_PICASA_USER_", mPrefManager.getGoogleUserName()).replace("_ALBUM_ID_", mSelectAlbumId);
+            url = AppConstant.URL_ALBUM_PHOTOS.replace("_PICASA_USER_", mPrefManager.getGoogleUserName()).replace("_ALBUM_ID_", mSelectAlbumId);
         }
 
         Log.d(TAG, "Final request url: " + url);
@@ -216,8 +216,8 @@ public class PhotoFragment extends Fragment {
                 // unable to fetch wallpapers
                 // either google username is wrong or
                 // devices doesn't have internet connection
-                Toast.makeText(getActivity(), getString(R.string.msg_wall_fetch_error),
-                        Toast.LENGTH_LONG).show();
+//                Toast.makeText(getActivity(), getString(R.string.msg_wall_fetch_error),
+//                        Toast.LENGTH_LONG).show();
 
             }
         });

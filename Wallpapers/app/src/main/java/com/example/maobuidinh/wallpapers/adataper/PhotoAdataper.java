@@ -3,11 +3,11 @@ package com.example.maobuidinh.wallpapers.adataper;
 import android.app.Activity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
@@ -23,6 +23,7 @@ import java.util.List;
  */
 
 public class PhotoAdataper extends RecyclerView.Adapter<PhotoAdataper.ItemViewHolder> {
+    private static final String TAG = PhotoAdataper.class.getSimpleName();
 
     private Activity mActivity;
     private List<Wallpaper> mWallpaperList = new ArrayList<Wallpaper>();
@@ -50,8 +51,9 @@ public class PhotoAdataper extends RecyclerView.Adapter<PhotoAdataper.ItemViewHo
         }
 
         holder.mNetworkImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        holder.mNetworkImageView.setLayoutParams( new RelativeLayout.LayoutParams(mImagWidth, mImagWidth));
+        //holder.mNetworkImageView.setLayoutParams( new FrameLayout.LayoutParams(mImagWidth, mImagWidth));
         holder.mNetworkImageView.setImageUrl(wallpaper.getUrl(), mImageLoader);
+        Log.e(TAG, "onBindViewHolder == url image : " + wallpaper.getUrl());
     }
 
     @Override

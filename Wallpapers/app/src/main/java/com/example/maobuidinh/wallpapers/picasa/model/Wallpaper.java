@@ -15,7 +15,7 @@ public class Wallpaper implements Serializable{
     public Wallpaper() {
     }
 
-    public Wallpaper(String url, String photoJson, int width, int height) {
+    public Wallpaper(String photoJson, String url,  int width, int height) {
         this.url = url;
         this.photoJson = photoJson;
         this.width = width;

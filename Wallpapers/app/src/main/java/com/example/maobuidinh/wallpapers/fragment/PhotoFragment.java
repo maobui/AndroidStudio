@@ -127,7 +127,7 @@ public class PhotoFragment extends Fragment {
         RecyclerView.LayoutManager mLayoutManager;
         mRecyclerView.setHasFixedSize(true);
         if (is) {
-            mLayoutManager = new StaggeredGridLayoutManager(SPANCOUNT + 1, StaggeredGridLayoutManager.VERTICAL);
+            mLayoutManager = new StaggeredGridLayoutManager(SPANCOUNT , StaggeredGridLayoutManager.VERTICAL);
             mRecyclerView.setLayoutManager(mLayoutManager);
         } else {
             mLayoutManager = new GridLayoutManager(getActivity(), SPANCOUNT);
@@ -164,8 +164,7 @@ public class PhotoFragment extends Fragment {
                                 + response.toString());
                 try {
                     // Parsing the json response
-                    JSONArray entry = response.getJSONObject(TAG_FEED)
-                            .getJSONArray(TAG_ENTRY);
+                    JSONArray entry = response.getJSONObject(TAG_FEED).getJSONArray(TAG_ENTRY);
 
                     // looping through each photo and adding it to list
                     // data set

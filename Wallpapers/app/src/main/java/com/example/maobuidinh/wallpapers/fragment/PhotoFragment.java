@@ -2,6 +2,7 @@ package com.example.maobuidinh.wallpapers.fragment;
 
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -20,6 +21,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.maobuidinh.wallpapers.R;
+import com.example.maobuidinh.wallpapers.activity.FullScreenActivity;
 import com.example.maobuidinh.wallpapers.adataper.PhotoAdataper;
 import com.example.maobuidinh.wallpapers.app.AppConstant;
 import com.example.maobuidinh.wallpapers.app.AppController;
@@ -101,6 +103,25 @@ public class PhotoFragment extends Fragment {
         mPhotoAdataper = new PhotoAdataper(getActivity(),mWallpaperList,mColumnWidth);
         setLayoutManager(true);
         mRecyclerView.setAdapter(mPhotoAdataper);
+        mRecyclerView.addOnItemTouchListener(new PhotoAdataper.RecyclerTouchListener(rootView.getContext(), mRecyclerView, new PhotoAdataper.ClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+
+                // On selecting the grid image, we launch fullscreen activity
+                Intent i = new Intent(getActivity(), FullScreenActivity.class);
+
+                // Passing selected image to fullscreen activity
+                Wallpaper photo = mWallpaperList.get(position);
+
+                i.putExtra(FullScreenActivity.TAG_SEL_IMAGE, photo);
+                startActivity(i);
+            }
+
+            @Override
+            public void onLongClick(View view, int position) {
+
+            }
+        }));
 //        mRecyclerView.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {

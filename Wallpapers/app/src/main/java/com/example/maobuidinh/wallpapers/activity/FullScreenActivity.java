@@ -108,6 +108,7 @@ public class FullScreenActivity extends AppCompatActivity  implements View.OnCli
 
     private void fetchPhoto() {
         String url = mWallpaper.getPhotoJson();
+        Log.d(TAG,  "Image full url: " + url);
 
         // show loader before making request
         m_pbLoader.setVisibility(View.VISIBLE);
@@ -120,9 +121,7 @@ public class FullScreenActivity extends AppCompatActivity  implements View.OnCli
 
             @Override
             public void onResponse(JSONObject response) {
-                Log.d(TAG,
-                        "Image full resolution json: "
-                                + response.toString());
+                Log.d(TAG,  "Image full resolution json: " + response.toString());
                 try {
                     // Parsing the json response
                     JSONObject entry = response.getJSONObject(TAG_ENTRY);
@@ -131,8 +130,7 @@ public class FullScreenActivity extends AppCompatActivity  implements View.OnCli
 
                     JSONObject mediaObj = (JSONObject) mediacontentArry.get(0);
 
-                    String fullResolutionUrl = mediaObj
-                            .getString(TAG_IMG_URL);
+                    String fullResolutionUrl = mediaObj.getString(TAG_IMG_URL);
 
                     // image full resolution widht and height
                     final int width = mediaObj.getInt(TAG_IMG_WIDTH);

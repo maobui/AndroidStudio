@@ -108,6 +108,7 @@ public class FullScreenActivity extends AppCompatActivity  implements View.OnCli
 
     private void fetchPhoto() {
         String url = mWallpaper.getPhotoJson();
+//        String url = AppConstant.URL_PHOTO;
         Log.d(TAG,  "Image full url: " + url);
 
         // show loader before making request

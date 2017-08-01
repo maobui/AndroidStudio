@@ -16,7 +16,12 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageLoader;
 import com.example.maobuidinh.wallpapers.R;
 import com.example.maobuidinh.wallpapers.app.AppController;
 import com.example.maobuidinh.wallpapers.fragment.PhotoFragment;
@@ -31,6 +36,16 @@ public class MainActivity extends AppCompatActivity
     // Navigation drawer
     private List<Category> mCategoryList;
     private NavigationView mNavigationView;
+
+    // Navigation header.
+    private ImageView m_imgHeaderBg;
+    private ImageView m_imgProfile;
+    private TextView m_txtName;
+    private TextView m_txtWebiste;
+//    private static final String URL_NAV_MENU_HEADER_BG = "https://s-media-cache-ak0.pinimg.com/736x/7e/62/4b/7e624b4b661d19e7b2b22240b947245d--wallpaper-computer-mobile-wallpaper.jpg";
+    private static final String URL_NAV_MENU_HEADER_BG = "https://static.comicvine.com/uploads/original/2/28030/2189534-fields.jpg";
+//    private static final String URL_NAV_MENU_HEADER_PROFILE = "https://static.comicvine.com/uploads/original/11124/111242797/5000958-17-gal-gadot.w750.h560.2x.jpg";
+    private static final String URL_NAV_MENU_HEADER_PROFILE = "https://s-media-cache-ak0.pinimg.com/736x/09/24/5c/09245c17d427f6b104e1fdcf8428dcfe.jpg";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,6 +154,8 @@ public class MainActivity extends AppCompatActivity
      * Init menu nav.
      */
     private void initNavigationDrawer(){
+
+        initNavHeader();
         // Getting the albums from shared preferences
         mCategoryList = AppController.getInstance().getPrefManager().getCategories();
         Menu menu = mNavigationView.getMenu();
@@ -155,6 +172,98 @@ public class MainActivity extends AppCompatActivity
             category = mCategoryList.get(i);
             menu.add(R.id.group_albums, ITEM_ABLUM_ID + i, i, category.getTitle()).setIcon(R.drawable.ic_menu_camera);
         }
+    }
+
+    private void initNavHeader() {
+        // Navigation view header
+        View navHeader = mNavigationView.getHeaderView(0);
+        m_imgHeaderBg = (ImageView) navHeader.findViewById(R.id.img_header_bg);
+        m_imgProfile = (ImageView) navHeader.findViewById(R.id.img_profile);
+        m_txtName = (TextView) findViewById(R.id.txt_name);
+        m_txtWebiste = (TextView) findViewById(R.id.txt_website);
+
+        fetchPhotoForHeader();
+
+    }
+
+    private void fetchPhotoForHeader() {
+
+        // volley's json obj request
+        try {
+
+            ImageLoader imageLoader = AppController.getInstance().getImageLoader();
+
+            // We download image into ImageView instead of
+            // NetworkImageView to have callback methods
+            // Currently NetworkImageView doesn't have callback
+            // methods
+
+            imageLoader.get(URL_NAV_MENU_HEADER_PROFILE,
+                    new ImageLoader.ImageListener() {
+
+                        @Override
+                        public void onErrorResponse(
+                                VolleyError arg0) {
+                            Toast.makeText( getApplicationContext(), getString(R.string.msg_wall_fetch_error),
+                                    Toast.LENGTH_LONG).show();
+                        }
+
+                        @Override
+                        public void onResponse(
+                                ImageLoader.ImageContainer response,
+                                boolean arg1) {
+                            if (response.getBitmap() != null) {
+                                // load bitmap into imageview
+                                m_imgProfile.setImageBitmap(response.getBitmap());
+
+                            }
+                        }
+                    });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(getApplicationContext(), getString(R.string.msg_unknown_error),
+                    Toast.LENGTH_LONG).show();
+        }
+
+        try {
+
+            ImageLoader imageLoader = AppController.getInstance().getImageLoader();
+
+            // We download image into ImageView instead of
+            // NetworkImageView to have callback methods
+            // Currently NetworkImageView doesn't have callback
+            // methods
+
+            imageLoader.get(URL_NAV_MENU_HEADER_BG,
+                    new ImageLoader.ImageListener() {
+
+                        @Override
+                        public void onErrorResponse(
+                                VolleyError arg0) {
+                            Toast.makeText( getApplicationContext(), getString(R.string.msg_wall_fetch_error),
+                                    Toast.LENGTH_LONG).show();
+                        }
+
+                        @Override
+                        public void onResponse(
+                                ImageLoader.ImageContainer response,
+                                boolean arg1) {
+                            if (response.getBitmap() != null) {
+                                // load bitmap into imageview
+                                m_imgHeaderBg.setImageBitmap(response.getBitmap());
+
+                            }
+                        }
+                    });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(getApplicationContext(), getString(R.string.msg_unknown_error),
+                    Toast.LENGTH_LONG).show();
+        }
+
+
     }
 
     /**

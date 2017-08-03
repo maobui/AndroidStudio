@@ -93,6 +93,7 @@ public class PaginationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             case ITEM:
                 final MovieVH movieVH = (MovieVH) holder;
 
+                movieVH.mRatting.setText(result.getVoteAverage().toString());
                 movieVH.mMovieTitle.setText(result.getTitle());
 
 
@@ -246,6 +247,7 @@ public class PaginationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
      * Main list's content ViewHolder
      */
     protected class MovieVH extends RecyclerView.ViewHolder {
+        private TextView mRatting;
         private TextView mMovieTitle;
         private TextView mMovieDesc;
         private TextView mYear; // displays "year | language"
@@ -255,6 +257,7 @@ public class PaginationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         public MovieVH(View itemView) {
             super(itemView);
 
+            mRatting = (TextView) itemView.findViewById(R.id.rating);
             mMovieTitle = (TextView) itemView.findViewById(R.id.movie_title);
             mMovieDesc = (TextView) itemView.findViewById(R.id.movie_desc);
             mYear = (TextView) itemView.findViewById(R.id.movie_year);

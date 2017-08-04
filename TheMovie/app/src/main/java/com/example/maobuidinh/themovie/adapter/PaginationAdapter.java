@@ -1,9 +1,11 @@
 package com.example.maobuidinh.themovie.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +20,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.example.maobuidinh.themovie.MovieDetailActivity;
 import com.example.maobuidinh.themovie.R;
 import com.example.maobuidinh.themovie.model.Result;
 import com.example.maobuidinh.themovie.util.PaginationAdapterCallback;
@@ -25,15 +28,18 @@ import com.example.maobuidinh.themovie.util.PaginationAdapterCallback;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.maobuidinh.themovie.AppConstant.POSTER_URL_IMG;
+
 /**
  * Created by maobuidinh on 7/13/2017.
  */
 
 public class PaginationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+    private static final String TAG = PaginationAdapter.class.getSimpleName();
+
     private static final int ITEM = 0;
     private static final int LOADING = 1;
-    private static final String BASE_URL_IMG = "https://image.tmdb.org/t/p/w150";
 
     private List<Result> movieResults;
     private Context context;
@@ -88,10 +94,21 @@ public class PaginationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
         Result result = movieResults.get(position); // Movie
+        final int idx = position;
 
         switch (getItemViewType(position)) {
             case ITEM:
                 final MovieVH movieVH = (MovieVH) holder;
+
+                movieVH.mPosterImg.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                            Log.e(TAG, "onClick ******************************* ");
+                            Intent intent = new Intent(v.getContext(), MovieDetailActivity.class);
+                            intent.putExtra("movie", movieResults.get(idx));
+                            v.getContext().startActivity(intent);
+                    }
+                });
 
                 movieVH.mRatting.setText(result.getVoteAverage().toString());
                 movieVH.mMovieTitle.setText(result.getTitle());
@@ -111,12 +128,13 @@ public class PaginationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                  */
                 Glide
                         .with(context)
-                        .load(BASE_URL_IMG + result.getPosterPath())
+                        .load(POSTER_URL_IMG + result.getPosterPath())
                         .listener(new RequestListener<String, GlideDrawable>() {
                             @Override
                             public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
                                 // TODO: 08/11/16 handle failure
                                 movieVH.mProgress.setVisibility(View.GONE);
+                                Log.e(TAG, " loadImage error:  " + e.getMessage());
                                 return false;
                             }
 
@@ -130,6 +148,8 @@ public class PaginationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                         .diskCacheStrategy(DiskCacheStrategy.ALL)   // cache both original & resized image
                         .centerCrop()
                         .crossFade()
+                        .placeholder(R.drawable.poster) // can also be a drawable first until to show real image.
+                        .error(android.R.drawable.ic_menu_report_image) // will be displayed if the image cannot be loaded
                         .into(movieVH.mPosterImg);
 
                 break;
@@ -246,7 +266,7 @@ public class PaginationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     /**
      * Main list's content ViewHolder
      */
-    protected class MovieVH extends RecyclerView.ViewHolder {
+    protected class MovieVH extends RecyclerView.ViewHolder /*implements View.OnClickListener*/{
         private TextView mRatting;
         private TextView mMovieTitle;
         private TextView mMovieDesc;
@@ -263,7 +283,21 @@ public class PaginationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             mYear = (TextView) itemView.findViewById(R.id.movie_year);
             mPosterImg = (ImageView) itemView.findViewById(R.id.movie_poster);
             mProgress = (ProgressBar) itemView.findViewById(R.id.movie_progress);
+
+            // Listener for all item_list layout.
+            //itemView.setOnClickListener(this);
+
+            // Listener for only movie_poster.
+//            mPosterImg.setOnClickListener(this);
         }
+
+//        @Override
+//        public void onClick(View v) {
+//            Log.e(TAG, "onClick ******************************* "+  (v.getId() == R.id.movie_poster));
+//            Intent intent = new Intent(v.getContext(), MovieDetailActivity.class);
+//            intent.putExtra("movie", movieResults.get(0));
+//            v.getContext().startActivity(intent);
+//        }
     }
 
 

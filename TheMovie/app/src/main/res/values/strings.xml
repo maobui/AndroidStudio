@@ -8,4 +8,5 @@
     <string name="error_msg_unknown">An unexpected error occurred</string>
     <string name="tap_to_reload">Tap to reload</string>
     <string name="ratting">5.0</string>
+    <string name="watch_trailer">watch trailer</string>
 </resources>

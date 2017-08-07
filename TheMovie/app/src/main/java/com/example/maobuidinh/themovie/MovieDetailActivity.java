@@ -91,7 +91,7 @@ public class MovieDetailActivity extends AppCompatActivity {
                 .diskCacheStrategy(DiskCacheStrategy.ALL)   // cache both original & resized image
                 .centerCrop()
                 .crossFade()
-                .placeholder((imageView.getId() == R.id.img_poster) ? R.drawable.poster : R.drawable.backdrop )
+                //.placeholder((imageView.getId() == R.id.img_poster) ? R.drawable.poster : R.drawable.backdrop )
                 .error((imageView.getId() == R.id.img_poster) ? android.R.drawable.ic_menu_report_image : R.drawable.detail_bg )
                 .into(imageView);
     }

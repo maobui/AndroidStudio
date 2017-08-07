@@ -148,7 +148,7 @@ public class PaginationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                         .diskCacheStrategy(DiskCacheStrategy.ALL)   // cache both original & resized image
                         .centerCrop()
                         .crossFade()
-                        .placeholder(R.drawable.poster) // can also be a drawable first until to show real image.
+                        //.placeholder(R.drawable.poster) // can also be a drawable first until to show real image.
                         .error(android.R.drawable.ic_menu_report_image) // will be displayed if the image cannot be loaded
                         .into(movieVH.mPosterImg);
 

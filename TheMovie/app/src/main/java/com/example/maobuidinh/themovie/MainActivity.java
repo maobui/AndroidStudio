@@ -126,6 +126,13 @@ public class MainActivity extends AppCompatActivity implements PaginationAdapter
 
                 hideErrorView();
 
+                Log.d(TAG, "response.code : " + (response.code()));
+                Log.d(TAG, "response.success : " + (response.isSuccessful()));
+                if (response.code() == 404 || !response.isSuccessful()) {
+                    showErrorView(null);
+                    return;
+                }
+
                 List<Result> results = fetchResults(response);
                 progressBar.setVisibility(View.GONE);
                 adapter.addAll(results);
@@ -193,6 +200,7 @@ public class MainActivity extends AppCompatActivity implements PaginationAdapter
 
     @Override
     public void retryPageLoad() {
+        adapter.showRetry(false, null);
         loadNextPage();
     }
 

@@ -10,15 +10,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.maobuidinh.glideimage.R;
+import com.example.maobuidinh.glideimage.helper.TouchImageView;
 import com.example.maobuidinh.glideimage.model.Image;
-import com.example.maobuidinh.glideimage.model.Item;
 import com.example.maobuidinh.glideimage.model.ImageTemplate;
+import com.example.maobuidinh.glideimage.model.Item;
 
 import java.util.ArrayList;
 
@@ -119,7 +119,7 @@ public class SlideshowDialogFragment<T> extends DialogFragment {
             layoutInflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View view = layoutInflater.inflate(R.layout.image_fullscreen_preview, container, false);
 
-            ImageView imageViewPreview = (ImageView) view.findViewById(R.id.image_preview);
+            TouchImageView imageViewPreview = (TouchImageView) view.findViewById(R.id.image_preview);
 
             T image = images.get(position);
 

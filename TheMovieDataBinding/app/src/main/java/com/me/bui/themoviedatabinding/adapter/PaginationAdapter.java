@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.me.bui.themoviedatabinding.R;
+import com.me.bui.themoviedatabinding.databinding.ItemListBinding;
 import com.me.bui.themoviedatabinding.model.Result;
 import com.me.bui.themoviedatabinding.util.PaginationAdapterCallback;
 
@@ -56,8 +57,8 @@ public class PaginationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         switch (viewType) {
             case ITEM:
-                View v1 = inflater.inflate(R.layout.item_list, parent, false);
-                viewHolder = new MovieHolder(context, v1);
+                ItemListBinding binding = ItemListBinding.inflate(inflater, parent, false);
+                viewHolder = new MovieHolder(binding);
                 break;
             case LOADING:
                 View v2 = inflater.inflate(R.layout.item_progress, parent, false);

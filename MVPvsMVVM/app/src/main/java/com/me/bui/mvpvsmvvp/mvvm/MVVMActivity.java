@@ -1,4 +1,4 @@
-package com.me.bui.mvpvsmvvp.mvp;
+package com.me.bui.mvpvsmvvp.mvvm;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,10 +10,15 @@ import com.me.bui.mvpvsmvvp.MVApplication;
 import com.me.bui.mvpvsmvvp.R;
 import com.me.bui.mvpvsmvvp.model.IModel;
 
-public class MVPActivity extends AppCompatActivity implements IView{
+import io.reactivex.disposables.CompositeDisposable;
+
+public class MVVMActivity extends AppCompatActivity {
 
     @NonNull
-    private IPresenter mIPresenter;
+    private CompositeDisposable mCompositeDisposable;
+
+    @NonNull
+    private ViewModel mViewModel;
 
     @Nullable
     private TextView m_txt_greeting;
@@ -23,7 +28,7 @@ public class MVPActivity extends AppCompatActivity implements IView{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mIPresenter = new Presenter(getModel(), this);
+        mViewModel = new ViewModel(getModel());
         setupViews();
     }
 
@@ -31,10 +36,9 @@ public class MVPActivity extends AppCompatActivity implements IView{
         m_txt_greeting = findViewById(R.id.txt_greeting);
     }
 
-    @Override
     public void setGreeting(@NonNull String greeting) {
         assert m_txt_greeting != null;
-        m_txt_greeting.setText(greeting + "MVP");
+        m_txt_greeting.setText(greeting + "MVVM");
     }
 
     @NonNull
@@ -44,13 +48,22 @@ public class MVPActivity extends AppCompatActivity implements IView{
 
     @Override
     protected void onPause() {
-        mIPresenter.unBind();
+        unBind();
         super.onPause();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mIPresenter.bind();
+        bind();
+    }
+
+    private void bind() {
+        mCompositeDisposable = new CompositeDisposable();
+        mCompositeDisposable.add(mViewModel.getGreeting().subscribe(this::setGreeting));
+    }
+
+    private void unBind() {
+        mCompositeDisposable.clear();
     }
 }

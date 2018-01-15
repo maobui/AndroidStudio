@@ -3,14 +3,21 @@
     package="com.me.bui.mvpvsmvvp">
 
     <application
-        android:name="com.me.bui.mvpvsmvvp.MVApplication"
+        android:name=".MVApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.me.bui.mvpvsmvvp.mvp.MVPActivity">
+        <activity android:name=".mvp.MVPActivity">
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+        </activity>
+        <activity android:name=".mvvm.MVVMActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

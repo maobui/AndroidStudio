@@ -10,7 +10,7 @@ import com.me.bui.mvpvsmvvp.MVApplication;
 import com.me.bui.mvpvsmvvp.R;
 import com.me.bui.mvpvsmvvp.model.IModel;
 
-public class MainActivity extends AppCompatActivity implements IView{
+public class MVPActivity extends AppCompatActivity implements IView{
 
     @NonNull
     private IPresenter mIPresenter;
@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements IView{
     @Override
     public void setGreeting(@NonNull String greeting) {
         assert m_txt_greeting != null;
-        m_txt_greeting.setText(greeting);
+        m_txt_greeting.setText(greeting + "MVP");
     }
 
     @NonNull

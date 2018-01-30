@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 
 import com.me.bui.mvvm.datamodel.DataModel;
 import com.me.bui.mvvm.datamodel.IDataModel;
+import com.me.bui.mvvm.schedulers.ISchedulerProvider;
 import com.me.bui.mvvm.schedulers.SchedulerProvider;
 import com.me.bui.mvvm.viewmodel.MainViewModel;
 
@@ -27,7 +28,7 @@ public class MVVMApplication extends Application{
     }
 
     @NonNull
-    public SchedulerProvider getSchedulerProvider(){
+    public ISchedulerProvider getSchedulerProvider(){
         return SchedulerProvider.getInstance();
     }
 

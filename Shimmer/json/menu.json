@@ -1,0 +1,74 @@
+[
+   {
+      "id":1,
+      "name":"Salmon Teriyaki",
+      "description":"Put the ginger and garlic into a bowl and mix with the soy sauce, maple syrup, mirin and a drizzle of olive oil",
+      "price":140,
+      "chef":"Gordon Ramsay",
+      "thumbnail":"https://api.androidhive.info/images/food/1.jpg",
+      "timestamp":"2 min ago"
+   },
+   {
+      "id":2,
+      "name":"Grilled Mushroom",
+      "description":"Combine butter, dill and garlic salt, brush over mushrooms.",
+      "price":150,
+      "chef":"Ravi Tamada",
+      "thumbnail":"https://api.androidhive.info/images/food/2.jpg",
+      "timestamp":"5 min ago"
+   },
+   {
+      "id":3,
+      "name":"Chicken Overload Meal",
+      "description":"A massive meal box with a lot of variety . Chicken tandoori gravy, Kebabs, Dal Makhani,Paratha , Salad and Gulabjamun",
+      "price":185,
+      "chef":"Anthony Bourdain",
+      "thumbnail":"https://api.androidhive.info/images/food/3.jpg",
+      "timestamp":"18 min ago"
+   },
+   {
+      "id":4,
+      "name":"Chinese Egg Fry",
+      "description":"Stir-fried tomato and scrambled eggs is a common dish in China",
+      "price":250,
+      "chef":"Emeril Lagasse",
+      "thumbnail":"https://api.androidhive.info/images/food/4.jpg",
+      "timestamp":"25 min ago"
+   },
+   {
+      "id":5,
+      "name":"Chicken Wraps",
+      "description":"A wrap is made with a soft flatbread rolled around a filling.",
+      "price":140,
+      "chef":"Christopher Lee",
+      "thumbnail":"https://api.androidhive.info/images/food/5.jpg",
+      "timestamp":"2 hrs ago"
+   },
+   {
+      "id":6,
+      "name":"Veggie Delight",
+      "description":"Add mushrooms and tofu; stir-fry 2 minutes. Add carrot, corn, and water chestnuts, stir-fry 1 minute. Stir in soy sauce and vinegar; cook 2 minutes. Stir in green onions, sesame oil, pepper, and salt.",
+      "price":230,
+      "chef":"Jacques Pépin",
+      "thumbnail":"https://api.androidhive.info/images/food/6.jpg",
+      "timestamp":"3 hrs ago"
+   },
+   {
+      "id":7,
+      "name":"Seafood Combo",
+      "description":"Sprinkle a dash of salt and pepper; continue cooking for another 2–3 minutes or until the shrimp turns pink and the vegetables are tender but still crunchy.",
+      "price":330,
+      "chef":"John Shields",
+      "thumbnail":"https://api.androidhive.info/images/food/7.jpg",
+      "timestamp":"10 hrs ago"
+   },
+   {
+      "id":8,
+      "name":"Full Tandoori",
+      "description":"Tandoori chicken is chicken dish prepared by roasting chicken marinated in yoghurt and spices in a tandoor, a cylindrical clay oven",
+      "price":430,
+      "chef":"Ken Hom",
+      "thumbnail":"https://api.androidhive.info/images/food/8.jpg",
+      "timestamp":"12 hrs ago"
+   }
+]

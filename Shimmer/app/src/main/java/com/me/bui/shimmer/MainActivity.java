@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     // URL to fetch menu json
     // this endpoint takes 2 sec before giving the response to add
     // some delay to test the Shimmer effect
-    private static final String URL = "https://raw.githubusercontent.com/maobui/android/test/Shimmer/json/menu.json";
+    private static final String URL = "https://raw.githubusercontent.com/maobui/android/master/Shimmer/json/menu.json";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
